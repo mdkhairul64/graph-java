@@ -1,0 +1,137 @@
+import java.io.*;
+import java.util.*;
+
+public class Graph {
+
+    private int V; // number of vertices
+    private LinkedList<Integer>[] adjList; // adjacency list
+
+    // Constructor
+    public Graph(int V) {
+        this.V = V;
+        adjList = new LinkedList[V];
+        for (int i = 0; i < V; i++) {
+            adjList[i] = new LinkedList<>();
+        }
+    }
+
+    // Add an edge to the graph
+    public void addEdge(int u, int v) {
+        adjList[u].add(v);
+        adjList[v].add(u); // Assuming an undirected graph
+    }
+
+    // Remove an edge from the graph
+    public void removeEdge(int u, int v) {
+        adjList[u].remove(Integer.valueOf(v));
+        adjList[v].remove(Integer.valueOf(u));
+    }
+
+    // Perform BFS from a given source node
+    public void bfs(int source) {
+        boolean[] visited = new boolean[V];
+        LinkedList<Integer> queue = new LinkedList<>();
+
+        // Start with the source node
+        visited[source] = true;
+        queue.add(source);
+
+        System.out.print("BFS traversal starting from vertex " + source + ": ");
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            System.out.print(node + " ");
+
+            // Explore neighbors
+            for (int neighbor : adjList[node]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.add(neighbor);
+                }
+            }
+        }
+        System.out.println();
+    }
+
+    // Print the graph (for debugging purposes)
+    public void printGraph() {
+        for (int i = 0; i < V; i++) {
+            System.out.print("Vertex " + i + ": ");
+            for (int neighbor : adjList[i]) {
+                System.out.print(neighbor + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // Read graph from a file
+    public static Graph readGraphFromFile(String fileName) throws IOException {
+
+
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line = br.readLine();
+
+        // First line contains number of vertices and edges
+
+
+        String[] parts = line.split(" ");
+
+        int V = Integer.parseInt(parts[0]);
+
+        int E = Integer.parseInt(parts[1]);
+
+        Graph graph = new Graph(V);
+
+        // Read each edge and add to the graph
+        for (int i = 0; i < E; i++) {
+            line = br.readLine();
+            parts = line.split(" ");
+            int u = Integer.parseInt(parts[0]);
+            int v = Integer.parseInt(parts[1]);
+            graph.addEdge(u, v);
+        }
+
+        br.close();
+        return graph;
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Reading graph from the file
+            //Graph graph = readGraphFromFile("graph.txt");
+
+            //Graph graph = readGraphFromFile("input_files/graph.txt");
+
+            Graph graph = readGraphFromFile("/home/khairul/Desktop/PYTHON/graph.txt");
+
+
+
+            // Print the initial graph
+            System.out.println("Initial Graph:");
+            graph.printGraph();
+
+            // Apply BFS from a source node (e.g., node 0)
+            graph.bfs(0);
+
+            // Adding a new edge (2, 4)
+            System.out.println("\nAdding edge (2, 4)");
+            graph.addEdge(2, 4);
+            graph.printGraph();
+
+            // Apply BFS again after adding the edge
+            graph.bfs(0);
+
+            // Removing an edge (0, 1)
+            System.out.println("\nRemoving edge (0, 1)");
+            graph.removeEdge(0, 1);
+            graph.printGraph();
+
+            // Apply BFS again after removing the edge
+            graph.bfs(0);
+
+        } catch (IOException e) {
+            System.out.println("Error reading the graph from file.");
+            e.printStackTrace();
+        }
+    }
+}
