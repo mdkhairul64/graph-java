@@ -1,0 +1,177 @@
+/*import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Graph {
+    private int vertices;
+    private ArrayList<ArrayList<Integer>> adjacencyList;
+
+    
+    public Graph(int vertices) {
+        this.vertices = vertices;
+        adjacencyList = new ArrayList<>(vertices);
+
+        for (int i = 0; i < vertices; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+    }
+
+  
+    public void addVertex() {
+        adjacencyList.add(new ArrayList<>());
+        vertices++;
+    }
+
+   
+    public void addEdge(int src, int dest) {
+        adjacencyList.get(src).add(dest);
+        adjacencyList.get(dest).add(src); 
+    }
+
+
+    public int getNumberOfVertices() {
+        return vertices;
+    }
+
+    public ArrayList<Integer> getAdjacentVertices(int vertex) {
+        return adjacencyList.get(vertex);
+    }
+
+    public void displayGraph() {
+        System.out.println("Adjacency List:");
+        for (int i = 0; i < vertices; i++) {
+            System.out.print((i + 1) + ": "); 
+            for (Integer neighbor : adjacencyList.get(i)) {
+                System.out.print((neighbor + 1) + " "); 
+            }
+            System.out.println();
+        }
+    }
+
+    public void bfs(int startVertex) {
+        boolean[] visited = new boolean[vertices];
+        int[] distances = new int[vertices];
+        Queue<Integer> queue = new LinkedList<>();
+
+        startVertex = startVertex - 1;
+        
+        visited[startVertex] = true;
+        queue.add(startVertex);
+
+        for (int i = 0; i < vertices; i++) {
+            distances[i] = -1;
+        }
+        distances[startVertex] = 0;
+
+        System.out.println("BFS Traversal Order:");
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            System.out.print((vertex + 1) + " ");  
+
+            for (Integer neighbor : adjacencyList.get(vertex)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    distances[neighbor] = distances[vertex] + 1; 
+                    queue.add(neighbor);
+                }
+            }
+        }
+        System.out.println();
+
+        System.out.println("Shortest paths from vertex " + (startVertex + 1) + ":");
+        for (int i = 0; i < vertices; i++) {
+            System.out.println("To vertex " + (i + 1) + ": " + distances[i]);
+        }
+    }
+}*/
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Graph {
+    private int vertices;
+    private ArrayList<ArrayList<Integer>> adjacencyList;
+
+    public Graph(int vertices) {
+        this.vertices = vertices;
+        adjacencyList = new ArrayList<>(vertices);
+
+        // Initialize adjacency list for each vertex
+        for (int i = 0; i < vertices; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+    }
+
+    // Method to add n vertices to the graph
+    public void addVertex(int n) {
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+        vertices += n;
+    }
+
+    public void addEdge(int src, int dest) {
+        adjacencyList.get(src).add(dest);
+        adjacencyList.get(dest).add(src);  // Assuming it's an undirected graph
+    }
+
+    public int getNumberOfVertices() {
+        return vertices;
+    }
+
+    public ArrayList<Integer> getAdjacentVertices(int vertex) {
+        return adjacencyList.get(vertex);
+    }
+
+    public void displayGraph() {
+        System.out.println("Adjacency List:");
+        for (int i = 0; i < vertices; i++) {
+            System.out.print((i + 1) + ": ");  // Convert back to 1-indexed for display
+            for (Integer neighbor : adjacencyList.get(i)) {
+                System.out.print((neighbor + 1) + " "); // Convert back to 1-indexed
+            }
+            System.out.println();
+        }
+    }
+
+    public void bfs(int startVertex) {
+        boolean[] visited = new boolean[vertices];
+        int[] distances = new int[vertices];  // Shortest distance from startVertex
+        Queue<Integer> queue = new LinkedList<>();
+        
+        // Convert 1-indexed startVertex to 0-indexed
+        startVertex = startVertex - 1;
+        
+        visited[startVertex] = true;
+        queue.add(startVertex);
+
+        // Initialize distances to a large number (infinity)
+        for (int i = 0; i < vertices; i++) {
+            distances[i] = -1;
+        }
+        distances[startVertex] = 0;
+
+        System.out.println("BFS Traversal Order:");
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            System.out.print((vertex + 1) + " ");  // Print in 1-indexed
+
+            for (Integer neighbor : adjacencyList.get(vertex)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    distances[neighbor] = distances[vertex] + 1;  // Calculate shortest path
+                    queue.add(neighbor);
+                }
+            }
+        }
+        System.out.println();
+
+        // Display shortest path to all vertices from startVertex
+        System.out.println("Shortest paths from vertex " + (startVertex + 1) + ":");
+        for (int i = 0; i < vertices; i++) {
+            System.out.println("To vertex " + (i + 1) + ": " + distances[i]);
+        }
+    }
+}
+
